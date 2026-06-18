@@ -221,7 +221,7 @@
         <canvas id="spectrum"></canvas>
 
         <!-- HIDDEN AUDIO ELEMENT -->
-        <audio id="bgm" loop preload="auto" crossorigin="anonymous">
+        <audio id="bgm" loop preload="auto">
             <source src="bgm.mp3" type="audio/mpeg" />
         </audio>
 
@@ -376,24 +376,26 @@
 
             // ── AUDIO SPECTRUM VISUALIZER ──
             // Dots connected by lines, dimmed in background.
-            // Audio starts muted. User clicks toggle to unmute.
-            // Visualizer runs regardless of mute state.
+            // Idle: gentle sine wave. Playing: reactive to audio frequency data.
+            // Click toggle to play/unmute. Click again to pause.
 
             const canvas = document.getElementById('spectrum');
-            const ctx = canvas.getContext('2d');
+            const cctx = canvas.getContext('2d');
             const audioEl = document.getElementById('bgm');
             const toggleBtn = document.getElementById('audioToggle');
 
+            const NUM_BINS = 80;
             let audioCtx = null;
             let analyser = null;
-            let gainNode = null;
-            let sourceNode = null;
-            let isPlaying = false;
-            let isMuted = true;
             let freqData = null;
-            let rafId = null;
+            let isPlaying = false;
 
-            const NUM_BINS = 96;
+            // Cache colors
+            const colors = {
+                line: getComputedStyle(document.documentElement).getPropertyValue('--blue').trim() || '#78a9ff',
+                dot: getComputedStyle(document.documentElement).getPropertyValue('--cyan').trim() || '#33b1ff',
+                idle: getComputedStyle(document.documentElement).getPropertyValue('--comment').trim() || '#6e6f70',
+            };
 
             function resizeCanvas() {
                 canvas.width = window.innerWidth;
@@ -405,165 +407,110 @@
             function initAudio() {
                 if (audioCtx) return;
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                sourceNode = audioCtx.createMediaElementSource(audioEl);
+                const src = audioCtx.createMediaElementSource(audioEl);
                 analyser = audioCtx.createAnalyser();
-                gainNode = audioCtx.createGain();
-
-                analyser.fftSize = NUM_BINS * 2;
-                analyser.smoothingTimeConstant = 0.8;
+                analyser.fftSize = 256;
+                analyser.smoothingTimeConstant = 0.82;
                 freqData = new Uint8Array(analyser.frequencyBinCount);
-
-                gainNode.gain.value = 0; // start muted
-
-                sourceNode.connect(analyser);
-                analyser.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
+                src.connect(analyser);
+                analyser.connect(audioCtx.destination);
             }
 
-            function drawSpectrum() {
-                rafId = requestAnimationFrame(drawSpectrum);
-
-                if (!analyser || !freqData) {
-                    drawIdle();
-                    return;
-                }
-
-                analyser.getByteFrequencyData(freqData);
-
+            function draw() {
+                requestAnimationFrame(draw);
                 const w = canvas.width;
                 const h = canvas.height;
                 const cy = h / 2;
                 const step = w / (NUM_BINS - 1);
 
-                ctx.clearRect(0, 0, w, h);
+                cctx.clearRect(0, 0, w, h);
 
-                // Compute points
-                const points = [];
+                // Get frequency data or idle wave
+                const amps = new Array(NUM_BINS);
+                if (analyser && isPlaying) {
+                    analyser.getByteFrequencyData(freqData);
+                    const bins = Math.min(freqData.length, NUM_BINS);
+                    for (let i = 0; i < NUM_BINS; i++) {
+                        const idx = Math.floor(i * bins / NUM_BINS);
+                        amps[i] = freqData[idx] / 255;
+                    }
+                    cctx.strokeStyle = colors.line;
+                    cctx.fillStyle = colors.dot;
+                } else {
+                    const t = Date.now() / 1000;
+                    for (let i = 0; i < NUM_BINS; i++) {
+                        amps[i] = (Math.sin(i * 0.25 + t * 1.2) * 0.3 + Math.sin(i * 0.08 + t * 0.7) * 0.2 + 0.3) * 0.15;
+                    }
+                    cctx.strokeStyle = colors.idle;
+                    cctx.fillStyle = colors.idle;
+                }
+
+                // Compute points (top + mirrored bottom)
+                const ptsTop = [];
+                const ptsBot = [];
                 for (let i = 0; i < NUM_BINS; i++) {
-                    const amp = freqData[i] / 255;
                     const x = i * step;
-                    const y = cy - amp * (h * 0.35);
-                    points.push({ x, y, amp });
+                    const amp = amps[i];
+                    const yOff = amp * h * 0.38;
+                    ptsTop.push({ x, y: cy - yOff, amp });
+                    ptsBot.push({ x, y: cy + yOff, amp });
                 }
 
-                // Draw lines connecting points
-                ctx.beginPath();
-                ctx.strokeStyle = getComputedStyle(document.documentElement)
-                    .getPropertyValue('--blue').trim() || '#78a9ff';
-                ctx.lineWidth = 1.5;
-                for (let i = 0; i < points.length; i++) {
-                    const p = points[i];
-                    // Mirror: draw bottom point too
-                    const yBot = cy + (cy - p.y);
-                    if (i === 0) {
-                        ctx.moveTo(p.x, p.y);
-                    } else {
-                        ctx.lineTo(p.x, p.y);
-                    }
+                // Draw top line
+                cctx.lineWidth = 1.5;
+                cctx.beginPath();
+                for (let i = 0; i < NUM_BINS; i++) {
+                    if (i === 0) cctx.moveTo(ptsTop[i].x, ptsTop[i].y);
+                    else cctx.lineTo(ptsTop[i].x, ptsTop[i].y);
                 }
-                ctx.stroke();
+                cctx.stroke();
 
-                // Draw mirrored line (bottom half)
-                ctx.beginPath();
-                for (let i = 0; i < points.length; i++) {
-                    const p = points[i];
-                    const yBot = cy + (cy - p.y);
-                    if (i === 0) {
-                        ctx.moveTo(p.x, yBot);
-                    } else {
-                        ctx.lineTo(p.x, yBot);
-                    }
+                // Draw bottom line (mirrored)
+                cctx.beginPath();
+                for (let i = 0; i < NUM_BINS; i++) {
+                    if (i === 0) cctx.moveTo(ptsBot[i].x, ptsBot[i].y);
+                    else cctx.lineTo(ptsBot[i].x, ptsBot[i].y);
                 }
-                ctx.stroke();
+                cctx.stroke();
 
-                // Draw dots at each point
-                ctx.fillStyle = getComputedStyle(document.documentElement)
-                    .getPropertyValue('--cyan').trim() || '#33b1ff';
-                for (let i = 0; i < points.length; i++) {
-                    const p = points[i];
-                    const yBot = cy + (cy - p.y);
-                    const dotSize = 1.5 + p.amp * 2;
-
-                    // Top dot
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, dotSize, 0, Math.PI * 2);
-                    ctx.fill();
-
-                    // Bottom dot (mirrored)
-                    ctx.beginPath();
-                    ctx.arc(p.x, yBot, dotSize, 0, Math.PI * 2);
-                    ctx.fill();
+                // Draw dots
+                for (let i = 0; i < NUM_BINS; i++) {
+                    const r = 1.5 + ptsTop[i].amp * 3;
+                    cctx.beginPath();
+                    cctx.arc(ptsTop[i].x, ptsTop[i].y, r, 0, Math.PI * 2);
+                    cctx.fill();
+                    cctx.beginPath();
+                    cctx.arc(ptsBot[i].x, ptsBot[i].y, r, 0, Math.PI * 2);
+                    cctx.fill();
                 }
             }
 
-            function drawIdle() {
-                // Gentle sine wave when no audio is playing
-                const w = canvas.width;
-                const h = canvas.height;
-                const cy = h / 2;
-                const step = w / (NUM_BINS - 1);
+            // Start visualizer immediately
+            draw();
 
-                ctx.clearRect(0, 0, w, h);
+            // Toggle: click to play, click again to pause
+            const playIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3" /></svg>';
+            const pauseIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></svg>';
 
-                const t = Date.now() / 1000;
-                const points = [];
-                for (let i = 0; i < NUM_BINS; i++) {
-                    const x = i * step;
-                    const wave = Math.sin(i * 0.3 + t * 0.5) * 15 + Math.sin(i * 0.1 + t * 0.3) * 10;
-                    const y = cy - wave;
-                    points.push({ x, y });
-                }
-
-                ctx.beginPath();
-                ctx.strokeStyle = getComputedStyle(document.documentElement)
-                    .getPropertyValue('--comment').trim() || '#6e6f70';
-                ctx.lineWidth = 1;
-                for (let i = 0; i < points.length; i++) {
-                    if (i === 0) ctx.moveTo(points[i].x, points[i].y);
-                    else ctx.lineTo(points[i].x, points[i].y);
-                }
-                ctx.stroke();
-
-                ctx.beginPath();
-                for (let i = 0; i < points.length; i++) {
-                    const yBot = cy + (cy - points[i].y);
-                    if (i === 0) ctx.moveTo(points[i].x, yBot);
-                    else ctx.lineTo(points[i].x, yBot);
-                }
-                ctx.stroke();
-            }
-
-            // Start visualizer immediately (idle animation)
-            drawSpectrum();
-
-            // Toggle button: first click starts audio (muted), second click unmutes
-            const muteIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" /></svg>';
-            const playIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" /><path d="M19.07 4.93a10 10 0 0 1 0 14.14" /></svg>';
+            toggleBtn.innerHTML = playIcon;
 
             toggleBtn.addEventListener('click', async () => {
-                if (!audioCtx) {
-                    // First click: init audio, start playing (muted)
+                if (!isPlaying) {
                     initAudio();
                     try {
-                        await audioCtx.resume();
+                        if (audioCtx.state === 'suspended') await audioCtx.resume();
                         await audioEl.play();
                         isPlaying = true;
-                        isMuted = true;
-                        toggleBtn.innerHTML = muteIcon;
+                        toggleBtn.innerHTML = pauseIcon;
                         toggleBtn.classList.add('playing');
                     } catch (e) {
-                        console.warn('Audio playback failed:', e);
+                        console.error('Audio error:', e);
                     }
-                } else if (isMuted) {
-                    // Unmute
-                    gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.3);
-                    isMuted = false;
-                    toggleBtn.innerHTML = playIcon;
                 } else {
-                    // Mute
-                    gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
-                    isMuted = true;
-                    toggleBtn.innerHTML = muteIcon;
+                    audioEl.pause();
+                    isPlaying = false;
+                    toggleBtn.innerHTML = playIcon;
+                    toggleBtn.classList.remove('playing');
                 }
             });
         </script>
