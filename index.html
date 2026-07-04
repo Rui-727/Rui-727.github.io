@@ -256,16 +256,18 @@
                 <p class="section-label">about</p>
                 <p class="hero-eyebrow">// low level engineering</p>
                 <p class="hero-bio">
-                    Rui here. I specialize in
+                    Rui here. I do
                     <span class="hl-blue">low level engineering</span>.
-                    Currently building
-                    <span class="hl-purple">Astray</span> — an
-                    <span class="hl-green">independent C toolchain</span>
-                    (compiler, linker, system library) with no GNU
-                    dependencies. Also made
-                    <span class="hl-green">Hoshizora</span> — a minimal
-                    <span class="hl-orange">PID 1 init system</span> for
-                    Linux/x86_64. :D
+                    Currently working on
+                    <span class="hl-purple">2O9</span>, a
+                    <span class="hl-green">package manager for Arch Linux</span>
+                    that puts files in /nix/store/ with content-addressed paths,
+                    generations, and a built-in rizin-style static ELF REPL plus
+                    gdb-style live debugger. Previously built
+                    <span class="hl-purple">Astray</span> (independent C toolchain,
+                    no GNU deps) and
+                    <span class="hl-green">Hoshizora</span> (minimal PID 1 for
+                    Linux/x86_64). :D
                 </p>
                 <div class="alias-row">
                     <span class="alias-pill">玄睿</span>
@@ -282,10 +284,16 @@
             <section class="section" id="projects">
                 <p class="section-label">projects</p>
                 <div class="projects-grid">
+                    <a href="https://github.com/Rui-727/2O9" target="_blank" class="project-card" style="--accent-color: var(--pink)">
+                        <span class="project-div">Systems / Package Manager</span>
+                        <span class="project-name">2O9</span>
+                        <span class="project-desc">Arch Linux package manager in C. Combines libalpm (vendored and modified), AUR workflow (chroot builds, PGP key import), and /nix/store/ with content-addressed paths, SQLite refs graph, hardlink dedup, and Ed25519-signed binary cache substitution. One config file (2O9.nix, Nix syntax). Includes Trakker (ptrace sandbox) and Debag (seccomp+ptrace hybrid sandbox with rizin-style static REPL and gdb-style live debugger).</span>
+                        <div class="project-tags"><span class="ptag">C11</span><span class="ptag">Arch Linux</span><span class="ptag">libalpm</span><span class="ptag">/nix/store</span><span class="ptag">Nix</span></div>
+                    </a>
                     <a href="https://github.com/Rui-727/Astray" target="_blank" class="project-card" style="--accent-color: var(--purple)">
                         <span class="project-div">Systems / Toolchain</span>
                         <span class="project-name">Astray</span>
-                        <span class="project-desc">Independent C toolchain — no GNU, no glibc, no LLVM. Self-hosted preprocessor, C compiler (astrayuuka), ELF-64 linker (alink), system library (Astraylib), build tool (Yuuka). Compiles real-world code: 22/83 busybox coreutils, sqlite3.c preprocessing. Modular glibc header support.</span>
+                        <span class="project-desc">Independent C toolchain: no GNU, no glibc, no LLVM. Self-hosted preprocessor, C compiler (astrayuuka), ELF-64 linker (alink), system library (Astraylib), build tool (Yuuka). Compiles real-world code: 22/83 busybox coreutils, sqlite3.c preprocessing. Modular glibc header support.</span>
                         <div class="project-tags"><span class="ptag">C11</span><span class="ptag">x86_64</span><span class="ptag">ELF-64</span><span class="ptag">compiler</span><span class="ptag">linker</span></div>
                     </a>
                     <a href="https://github.com/Rui-727/Hoshizora" target="_blank" class="project-card" style="--accent-color: var(--green)">
