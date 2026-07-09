@@ -8,7 +8,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
         <style>
             :root {
-                /* Carbonfox — EdenEast/nightfox.nvim */
+                /* Carbonfox - EdenEast/nightfox.nvim */
                 --bg: #161616;
                 --bg-card: #252525;
                 --bg-hover: #353535;
@@ -41,7 +41,7 @@
                 overflow-x: hidden;
             }
 
-            /* AUDIO SPECTRUM CANVAS — fixed background, dimmed */
+            /* AUDIO SPECTRUM CANVAS - fixed background, dimmed */
             #spectrum {
                 position: fixed;
                 top: 0; left: 0;
@@ -236,7 +236,7 @@
 
         <header>
             <div class="header-identity">
-                <img class="header-pfp" src="https://avatars.githubusercontent.com/u/294377355?v=4" alt="Rui" />
+                <img class="header-pfp" src="https://github.com/Rui-727.png" alt="Rui" />
                 <div>
                     <div class="header-name">Rui</div>
                     <div class="header-aliases">玄睿 · @Rui-727</div>
@@ -263,9 +263,11 @@
                     <span class="hl-green">package manager for Arch Linux</span>
                     that puts files in /nix/store/ with content-addressed paths,
                     generations, and a built-in rizin-style static ELF REPL plus
-                    gdb-style live debugger. Previously built
-                    <span class="hl-purple">Astray</span> (independent C toolchain,
-                    no GNU deps) and
+                    gdb-style live debugger. Also built
+                    <span class="hl-yellow">zenctl</span> (C library for
+                    hardware control on Linux, 10 domains), 
+                    <span class="hl-purple">Astray</span> (independent C
+                    toolchain, no GNU deps) and
                     <span class="hl-green">Hoshizora</span> (minimal PID 1 for
                     Linux/x86_64). :D
                 </p>
@@ -277,7 +279,7 @@
                 </div>
                 <div class="quote-block">
                     <p class="quote-text">"The best thing that you can make is the one that you searched for it."</p>
-                    <p class="quote-author">— Rui</p>
+                    <p class="quote-author">Rui</p>
                 </div>
             </section>
 
@@ -293,7 +295,7 @@
                     <a href="https://github.com/Rui-727/Astray" target="_blank" class="project-card" style="--accent-color: var(--purple)">
                         <span class="project-div">Systems / Toolchain</span>
                         <span class="project-name">Astray</span>
-                        <span class="project-desc">Independent C toolchain: no GNU, no glibc, no LLVM. Self-hosted preprocessor, C compiler (astrayuuka), ELF-64 linker (alink), system library (Astraylib), build tool (Yuuka). Compiles real-world code: 22/83 busybox coreutils, sqlite3.c preprocessing. Modular glibc header support.</span>
+                        <span class="project-desc">Independent C toolchain. No GNU, no glibc, no LLVM. Self-hosted preprocessor, C compiler (astrayuuka), ELF-64 linker (alink), system library (Astraylib), build tool (Yuuka). Compiles real-world code: 22/83 busybox coreutils, sqlite3.c preprocessing. Modular glibc header support.</span>
                         <div class="project-tags"><span class="ptag">C11</span><span class="ptag">x86_64</span><span class="ptag">ELF-64</span><span class="ptag">compiler</span><span class="ptag">linker</span></div>
                     </a>
                     <a href="https://github.com/Rui-727/Hoshizora" target="_blank" class="project-card" style="--accent-color: var(--green)">
@@ -319,6 +321,12 @@
                         <span class="project-name">hz-session</span>
                         <span class="project-desc">pam_exec helper for login session tracking. Writes session files, grants ACLs on GPU/sound/input devices, revokes on logout. 71 lines of shell.</span>
                         <div class="project-tags"><span class="ptag">POSIX sh</span><span class="ptag">PAM</span><span class="ptag">setfacl</span></div>
+                    </a>
+                    <a href="https://github.com/Rui-727/Zenctl" target="_blank" class="project-card" style="--accent-color: var(--yellow)">
+                        <span class="project-div">Systems / Hardware</span>
+                        <span class="project-name">zenctl</span>
+                        <span class="project-desc">C library and CLI that exposes every hardware control on Linux. 10 domains: CPU, memory, storage, network, GPU, thermal, power, PCIe, USB, firmware. sysfs + procfs + ioctl + ACPI/WMI. Typed domain API plus generic key-value fallback. 243 unit tests with mock sysfs.</span>
+                        <div class="project-tags"><span class="ptag">C11</span><span class="ptag">Linux</span><span class="ptag">sysfs</span><span class="ptag">ioctl</span><span class="ptag">library</span></div>
                     </a>
                 </div>
             </section>
