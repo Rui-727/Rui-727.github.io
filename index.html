@@ -7,28 +7,35 @@
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
         <style>
+            /* ===== ANIMATABLE GRADIENT COLORS ===== */
+            /* @property lets CSS transition between gradient color values.
+               Without this, gradients snap instantly on theme change. */
+            @property --grad-1 { syntax: '<color>'; initial-value: rgba(255,107,107,0.05); inherits: true; }
+            @property --grad-2 { syntax: '<color>'; initial-value: rgba(144,238,144,0.04); inherits: true; }
+
             /* ===== CUSTOMIZABLE PROPERTIES ===== */
 
+            /* Default theme: inhouse (from QML task manager) */
             :root {
                 /* Window */
-                --bg: #161616;
-                --bg-card: #252525;
-                --bg-hover: #353535;
-                --bg-glow-1: var(--bg-glow-1);
-                --bg-glow-2: var(--bg-glow-2);
-                --bg-header: var(--bg-header);
-                --bg-nav-active: var(--bg-nav-active);
+                --bg: #0a0a0a;
+                --bg-card: #0f0f0f;
+                --bg-hover: #1a1c1c;
+                --bg-glow-1: var(--grad-1);
+                --bg-glow-2: var(--grad-2);
+                --bg-header: rgba(10, 10, 10, 0.92);
+                --bg-nav-active: rgba(26, 28, 28, 0.5);
 
                 /* Border */
-                --border: #353535;
-                --border-hl: #535353;
+                --border: #2a2a2a;
+                --border-hl: #685F60;
                 --border-width: 1px;
 
                 /* Text */
-                --text: #b6b8bb;
-                --text-dim: #7b7c7e;
-                --text-head: #f2f4f8;
-                --text-comment: #6e6f70;
+                --text: #cccccc;
+                --text-dim: #685F60;
+                --text-head: #ffffff;
+                --text-comment: #685F60;
                 --font-body: "Inter", sans-serif;
                 --font-mono: "JetBrains Mono", monospace;
 
@@ -36,15 +43,15 @@
                 --radius: 10px;
                 --radius-sm: 6px;
 
-                /* Accents */
-                --blue: #78a9ff;
-                --cyan: #33b1ff;
-                --green: #25be6a;
-                --purple: #be95ff;
-                --orange: #3ddbd9;
-                --red: #ee5396;
-                --yellow: #08bdba;
-                --pink: #ff7eb6;
+                /* Accents (from QML: cpuColor, diskColor, gpuColor, memColor, tempColor) */
+                --blue: #FF6B6B;
+                --cyan: #85A094;
+                --green: #90EE90;
+                --purple: #685F60;
+                --orange: #85A094;
+                --red: #FF6B6B;
+                --yellow: #FFD93D;
+                --pink: #FF6B6B;
                 --accent: var(--blue);
 
                 /* Layout */
@@ -54,21 +61,49 @@
                 --card-gap: 0.85rem;
 
                 /* Animation */
-                --anim-duration: 300ms;
+                --anim-duration: 400ms;
                 --anim-duration-fast: 150ms;
-                --anim-duration-slow: 500ms;
+                --anim-duration-slow: 600ms;
                 --anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+                /* Gradient colors (animated via @property) */
+                --grad-1: rgba(255, 107, 107, 0.05);
+                --grad-2: rgba(144, 238, 144, 0.04);
+
+                transition: --grad-1 var(--anim-duration) var(--anim-easing),
+                            --grad-2 var(--anim-duration) var(--anim-easing);
             }
 
-            /* Alternative theme: set data-theme="carbonfox" on <html> (default)
-               data-theme="gruvbox" for a warm palette
-               data-theme="nord" for a cold palette */
+            /* Carbonfox (previous default) */
+            [data-theme="carbonfox"] {
+                --bg: #161616;
+                --bg-card: #252525;
+                --bg-hover: #353535;
+                --bg-header: rgba(22, 22, 22, 0.9);
+                --bg-nav-active: rgba(37, 37, 37, 0.5);
+                --border: #353535;
+                --border-hl: #535353;
+                --text: #b6b8bb;
+                --text-dim: #7b7c7e;
+                --text-head: #f2f4f8;
+                --text-comment: #6e6f70;
+                --blue: #78a9ff;
+                --cyan: #33b1ff;
+                --green: #25be6a;
+                --purple: #be95ff;
+                --orange: #3ddbd9;
+                --red: #ee5396;
+                --yellow: #08bdba;
+                --pink: #ff7eb6;
+                --grad-1: rgba(120, 169, 255, 0.07);
+                --grad-2: rgba(37, 190, 106, 0.05);
+            }
+
+            /* Gruvbox */
             [data-theme="gruvbox"] {
                 --bg: #1d2021;
                 --bg-card: #282828;
                 --bg-hover: #3c3836;
-                --bg-glow-1: rgba(214, 93, 14, 0.07);
-                --bg-glow-2: rgba(184, 187, 38, 0.05);
                 --bg-header: rgba(29, 32, 33, 0.9);
                 --bg-nav-active: rgba(40, 40, 40, 0.5);
                 --border: #3c3836;
@@ -85,14 +120,15 @@
                 --red: #fb4934;
                 --yellow: #fe8019;
                 --pink: #d3869b;
+                --grad-1: rgba(214, 93, 14, 0.07);
+                --grad-2: rgba(184, 187, 38, 0.05);
             }
 
+            /* Nord */
             [data-theme="nord"] {
                 --bg: #2e3440;
                 --bg-card: #3b4252;
                 --bg-hover: #434c5e;
-                --bg-glow-1: rgba(94, 129, 172, 0.07);
-                --bg-glow-2: rgba(163, 190, 140, 0.05);
                 --bg-header: rgba(46, 52, 64, 0.9);
                 --bg-nav-active: rgba(59, 66, 82, 0.5);
                 --border: #434c5e;
@@ -109,18 +145,22 @@
                 --red: #bf616a;
                 --yellow: #ebcb8b;
                 --pink: #b48ead;
+                --grad-1: rgba(94, 129, 172, 0.07);
+                --grad-2: rgba(163, 190, 140, 0.05);
             }
 
             /* ===== END CUSTOMIZABLE PROPERTIES ===== */
             * { margin: 0; padding: 0; box-sizing: border-box; }
             html { scroll-behavior: smooth; }
             body {
-                font-family: "Inter", sans-serif;
+                font-family: var(--font-body);
                 background: var(--bg);
                 color: var(--text);
                 line-height: 1.7;
                 min-height: 100vh;
                 overflow-x: hidden;
+                transition: background-color var(--anim-duration) var(--anim-easing),
+                            color var(--anim-duration) var(--anim-easing);
             }
 
             /* AUDIO SPECTRUM CANVAS - fixed background, dimmed */
@@ -138,14 +178,38 @@
                 position: fixed;
                 inset: 0;
                 background:
-                    radial-gradient(ellipse 50% 50% at 100% 0%, var(--bg-glow-1) 0%, transparent 55%),
-                    radial-gradient(ellipse 40% 40% at 0% 100%, var(--bg-glow-2) 0%, transparent 55%);
+                    radial-gradient(ellipse 50% 50% at 100% 0%, var(--grad-1) 0%, transparent 55%),
+                    radial-gradient(ellipse 40% 40% at 0% 100%, var(--grad-2) 0%, transparent 55%);
                 pointer-events: none;
                 z-index: 0;
+                transition: --grad-1 var(--anim-duration) var(--anim-easing),
+                            --grad-2 var(--anim-duration) var(--anim-easing);
+            }
+
+            /* Theme switch pulse: a radial gradient overlay that briefly
+               expands and fades when the theme changes. */
+            #themePulse {
+                position: fixed;
+                top: 28px;
+                right: 28px;
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 9999;
+                opacity: 0;
+            }
+            #themePulse.active {
+                animation: themePulse var(--anim-duration-slow) var(--anim-easing) forwards;
+            }
+            @keyframes themePulse {
+                0%   { transform: scale(1); opacity: 0.6; box-shadow: 0 0 0 0 var(--accent); }
+                100% { transform: scale(1); opacity: 0; box-shadow: 0 0 0 80vmax var(--accent); }
             }
 
             /* HEADER */
             header {
+                transition: background-color var(--anim-duration) var(--anim-easing), border-color var(--anim-duration) var(--anim-easing);
                 position: sticky;
                 top: 0;
                 z-index: 100;
@@ -244,7 +308,8 @@
 
             /* HARDWARE */
             .hw-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.6rem; }
-            .hw-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.75rem 0.9rem; }
+            .hw-card {
+                transition: background-color var(--anim-duration) var(--anim-easing), border-color var(--anim-duration) var(--anim-easing); background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.75rem 0.9rem; }
             .hw-label { font-family: "JetBrains Mono", monospace; font-size: 0.58rem; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 0.25rem; }
             .hw-value { font-size: 0.85rem; color: var(--text-head); font-weight: 600; }
             .hw-sub { font-family: "JetBrains Mono", monospace; font-size: 0.68rem; color: var(--text-dim); margin-top: 0.1rem; }
@@ -253,11 +318,14 @@
             .skill-group { margin-bottom: 1.2rem; }
             .skill-group-label { font-family: "JetBrains Mono", monospace; font-size: 0.68rem; margin-bottom: 0.5rem; }
             .skill-list { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-            .skill-tag { font-family: "JetBrains Mono", monospace; font-size: 0.68rem; padding: 0.25rem 0.6rem; border-radius: var(--radius-sm); background: var(--bg-card); border: 1px solid var(--border); color: var(--text); }
+            .skill-tag {
+                transition: background-color var(--anim-duration) var(--anim-easing), border-color var(--anim-duration) var(--anim-easing), color var(--anim-duration) var(--anim-easing); font-family: "JetBrains Mono", monospace; font-size: 0.68rem; padding: 0.25rem 0.6rem; border-radius: var(--radius-sm); background: var(--bg-card); border: 1px solid var(--border); color: var(--text); }
 
             /* CONTACT */
             .contact-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.6rem; }
-            .contact-link { display: flex; align-items: center; gap: 0.65rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.75rem 0.9rem; text-decoration: none; transition: all var(--anim-duration-fast, 150ms); }
+            .contact-link {
+                transition: background-color var(--anim-duration) var(--anim-easing), border-color var(--anim-duration) var(--anim-easing); } 
+            .contact-link { display: flex; align-items: center; gap: 0.65rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.75rem 0.9rem; text-decoration: none; transition: background-color var(--anim-duration) var(--anim-easing), border-color var(--anim-duration) var(--anim-easing); }
             .contact-link:hover { border-color: var(--border-hl); background: var(--bg-hover); }
             .contact-icon { width: 34px; height: 34px; border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
@@ -295,7 +363,8 @@
             }
 
             @media (max-width: 640px) {
-                header { flex-wrap: wrap; padding: 0.75rem 1rem; gap: 0.5rem; }
+                header {
+                transition: background-color var(--anim-duration) var(--anim-easing), border-color var(--anim-duration) var(--anim-easing); flex-wrap: wrap; padding: 0.75rem 1rem; gap: 0.5rem; }
                 .header-nav { margin-left: 0; flex-wrap: wrap; }
                 main { padding: 2rem 1.25rem 3rem; }
                 .projects-grid { grid-template-columns: 1fr; }
@@ -305,6 +374,7 @@
     <body>
         <!-- AUDIO SPECTRUM CANVAS -->
         <canvas id="spectrum"></canvas>
+        <div id="themePulse"></div>
 
         <!-- HIDDEN AUDIO ELEMENT -->
         <audio id="bgm" loop preload="auto">
@@ -469,19 +539,29 @@
 
         <script>
             // ── THEME CYCLING ──
-            const themes = ['carbonfox', 'gruvbox', 'nord'];
+            const themes = ['inhouse', 'carbonfox', 'gruvbox', 'nord'];
             let themeIdx = 0;
             const themeToggle = document.getElementById('themeToggle');
+            const themePulse = document.getElementById('themePulse');
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme && themes.includes(savedTheme)) {
                 themeIdx = themes.indexOf(savedTheme);
-                document.documentElement.setAttribute('data-theme', savedTheme);
+                if (savedTheme !== 'inhouse')
+                    document.documentElement.setAttribute('data-theme', savedTheme);
             }
             themeToggle.addEventListener('click', () => {
                 themeIdx = (themeIdx + 1) % themes.length;
                 const next = themes[themeIdx];
-                document.documentElement.setAttribute('data-theme', next);
+                if (next === 'inhouse')
+                    document.documentElement.removeAttribute('data-theme');
+                else
+                    document.documentElement.setAttribute('data-theme', next);
                 localStorage.setItem('theme', next);
+                // Fire the pulse
+                themePulse.classList.remove('active');
+                void themePulse.offsetWidth;
+                themePulse.style.setProperty('--accent', getComputedStyle(document.documentElement).getPropertyValue('--blue').trim());
+                themePulse.classList.add('active');
             });
 
             // ── NAV ACTIVE HIGHLIGHTING ──
