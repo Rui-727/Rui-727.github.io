@@ -259,17 +259,15 @@
                     Rui here. I do
                     <span class="hl-blue">low level engineering</span>.
                     Currently working on
-                    <span class="hl-purple">2O9</span>, a
-                    <span class="hl-green">package manager for Arch Linux</span>
-                    that puts files in /nix/store/ with content-addressed paths,
-                    generations, and a built-in rizin-style static ELF REPL plus
-                    gdb-style live debugger. Also built
+                    <span class="hl-purple">2O9</span> (Arch Linux package
+                    manager with /nix/store/, generations, built-in debugger)
+                    and
                     <span class="hl-yellow">zenctl</span> (C library for
-                    hardware control on Linux, 10 domains), 
-                    <span class="hl-purple">Astray</span> (independent C
-                    toolchain, no GNU deps) and
-                    <span class="hl-green">Hoshizora</span> (minimal PID 1 for
-                    Linux/x86_64). :D
+                    hardware control on Linux, 10 domains).
+                    <span class="hl-green">Hoshizora</span> (PID 1 init) is
+                    waiting on an issue. Also made
+                    <span class="hl-cyan">gh-contribs</span> (extract GitHub
+                    contribution data as flat text). :D
                 </p>
                 <div class="alias-row">
                     <span class="alias-pill">玄睿</span>
@@ -292,17 +290,11 @@
                         <span class="project-desc">Arch Linux package manager in C. Combines libalpm (vendored and modified), AUR workflow (chroot builds, PGP key import), and /nix/store/ with content-addressed paths, SQLite refs graph, hardlink dedup, and Ed25519-signed binary cache substitution. One config file (2O9.nix, Nix syntax). Includes Trakker (ptrace sandbox) and Debag (seccomp+ptrace hybrid sandbox with rizin-style static REPL and gdb-style live debugger).</span>
                         <div class="project-tags"><span class="ptag">C11</span><span class="ptag">Arch Linux</span><span class="ptag">libalpm</span><span class="ptag">/nix/store</span><span class="ptag">Nix</span></div>
                     </a>
-                    <a href="https://github.com/Rui-727/Astray" target="_blank" class="project-card" style="--accent-color: var(--purple)">
-                        <span class="project-div">Systems / Toolchain</span>
-                        <span class="project-name">Astray</span>
-                        <span class="project-desc">Independent C toolchain. No GNU, no glibc, no LLVM. Self-hosted preprocessor, C compiler (astrayuuka), ELF-64 linker (alink), system library (Astraylib), build tool (Yuuka). Compiles real-world code: 22/83 busybox coreutils, sqlite3.c preprocessing. Modular glibc header support.</span>
-                        <div class="project-tags"><span class="ptag">C11</span><span class="ptag">x86_64</span><span class="ptag">ELF-64</span><span class="ptag">compiler</span><span class="ptag">linker</span></div>
-                    </a>
                     <a href="https://github.com/Rui-727/Hoshizora" target="_blank" class="project-card" style="--accent-color: var(--green)">
                         <span class="project-div">Systems / Init</span>
                         <span class="project-name">Hoshizora</span>
-                        <span class="project-desc">Minimal PID 1 init system for Linux. Single C file, libc only, static binary. Cgroups v2, fanotify, socket activation, sd-notify, plugin event socket, container integration. 2.7k LOC.</span>
-                        <div class="project-tags"><span class="ptag">C99</span><span class="ptag">Linux</span><span class="ptag">PID 1</span><span class="ptag">65 tests</span></div>
+                        <span class="project-desc">Minimal PID 1 init system for Linux. Single C file, libc only, static binary. Cgroups v2, fanotify, socket activation, sd-notify, plugin event socket, container integration. 2.7k LOC. 83 tests.</span>
+                        <div class="project-tags"><span class="ptag">C99</span><span class="ptag">Linux</span><span class="ptag">PID 1</span><span class="ptag">83 tests</span></div>
                     </a>
                     <a href="https://github.com/Rui-727/Hoshizora/blob/main/src/hzlog.c" target="_blank" class="project-card" style="--accent-color: var(--blue)">
                         <span class="project-div">Systems / Logging</span>
@@ -322,10 +314,16 @@
                         <span class="project-desc">pam_exec helper for login session tracking. Writes session files, grants ACLs on GPU/sound/input devices, revokes on logout. 71 lines of shell.</span>
                         <div class="project-tags"><span class="ptag">POSIX sh</span><span class="ptag">PAM</span><span class="ptag">setfacl</span></div>
                     </a>
+                    <a href="https://github.com/Rui-727/gh-contribs" target="_blank" class="project-card" style="--accent-color: var(--cyan)">
+                        <span class="project-div">Tool / Bookmarklet</span>
+                        <span class="project-name">gh-contribs</span>
+                        <span class="project-desc">Extract GitHub contribution data as flat text. One line per day, sorted by date. Console paste, bookmarklet, or userscript. No dependencies, no network requests.</span>
+                        <div class="project-tags"><span class="ptag">JavaScript</span><span class="ptag">bookmarklet</span><span class="ptag">userscript</span></div>
+                    </a>
                     <a href="https://github.com/Rui-727/Zenctl" target="_blank" class="project-card" style="--accent-color: var(--yellow)">
                         <span class="project-div">Systems / Hardware</span>
                         <span class="project-name">zenctl</span>
-                        <span class="project-desc">C library and CLI that exposes every hardware control on Linux. 10 domains: CPU, memory, storage, network, GPU, thermal, power, PCIe, USB, firmware. sysfs + procfs + ioctl + ACPI/WMI. Typed domain API plus generic key-value fallback. 243 unit tests with mock sysfs.</span>
+                        <span class="project-desc">C library and CLI that exposes every hardware control on Linux. 10 domains: CPU, memory, storage, network, GPU, thermal, power, PCIe, USB, firmware. sysfs + procfs + ioctl + ACPI/WMI + nl80211. NVML for NVIDIA, i915 for Intel. Typed domain API plus generic key-value fallback. 584 unit tests with mock sysfs.</span>
                         <div class="project-tags"><span class="ptag">C11</span><span class="ptag">Linux</span><span class="ptag">sysfs</span><span class="ptag">ioctl</span><span class="ptag">library</span></div>
                     </a>
                 </div>
