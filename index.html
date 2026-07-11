@@ -187,11 +187,10 @@
             }
 
             /* Theme switch pulse: a radial gradient overlay that briefly
-               expands and fades when the theme changes. */
+               expands and fades when the theme changes. Origin is set
+               dynamically from the toggle button's bounding rect. */
             #themePulse {
                 position: fixed;
-                top: 28px;
-                right: 28px;
                 width: 8px;
                 height: 8px;
                 border-radius: 50%;
@@ -203,8 +202,8 @@
                 animation: themePulse var(--anim-duration-slow) var(--anim-easing) forwards;
             }
             @keyframes themePulse {
-                0%   { transform: scale(1); opacity: 0.6; box-shadow: 0 0 0 0 var(--accent); }
-                100% { transform: scale(1); opacity: 0; box-shadow: 0 0 0 80vmax var(--accent); }
+                0%   { opacity: 0.6; box-shadow: 0 0 0 0 var(--accent); }
+                100% { opacity: 0; box-shadow: 0 0 0 100vmax var(--accent); }
             }
 
             /* HEADER */
@@ -557,9 +556,12 @@
                 else
                     document.documentElement.setAttribute('data-theme', next);
                 localStorage.setItem('theme', next);
-                // Fire the pulse
+                // Fire the pulse from the button's actual position
                 themePulse.classList.remove('active');
                 void themePulse.offsetWidth;
+                const rect = themeToggle.getBoundingClientRect();
+                themePulse.style.left = (rect.left + rect.width / 2 - 4) + 'px';
+                themePulse.style.top = (rect.top + rect.height / 2 - 4) + 'px';
                 themePulse.style.setProperty('--accent', getComputedStyle(document.documentElement).getPropertyValue('--blue').trim());
                 themePulse.classList.add('active');
             });
