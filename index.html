@@ -424,6 +424,8 @@
                     hardware control on Linux, 10 domains).
                     <span class="hl-green">Hoshizora</span> (PID 1 init) is
                     waiting on an issue. Also made
+                    <span class="hl-red">RRSort</span> (adaptive radix sort,
+                    O(n) when it can be) and
                     <span class="hl-cyan">gh-contribs</span> (extract GitHub
                     contribution data as flat text). :D
                 </p>
@@ -483,6 +485,12 @@
                         <span class="project-name">zenctl</span>
                         <span class="project-desc">C library and CLI that exposes every hardware control on Linux. 10 domains: CPU, memory, storage, network, GPU, thermal, power, PCIe, USB, firmware. sysfs + procfs + ioctl + ACPI/WMI + nl80211. NVML for NVIDIA, i915 for Intel. Typed domain API plus generic key-value fallback. 584 unit tests with mock sysfs.</span>
                         <div class="project-tags"><span class="ptag">C11</span><span class="ptag">Linux</span><span class="ptag">sysfs</span><span class="ptag">ioctl</span><span class="ptag">library</span></div>
+                    </a>
+                    <a href="https://github.com/Rui-727/RRSort" target="_blank" class="project-card" style="--accent-color: var(--red)">
+                        <span class="project-div">Algorithm / Sorting</span>
+                        <span class="project-name">RRSort</span>
+                        <span class="project-desc">Ramanujan Radix Sort. Adaptive integer sort that is O(n) when max is polynomial in n, O(n log_n U) in general. Beats qsort by 2-7x on structured inputs. C11, static library, 31 tests, benchmarked up to 10M elements.</span>
+                        <div class="project-tags"><span class="ptag">C11</span><span class="ptag">algorithm</span><span class="ptag">radix sort</span><span class="ptag">O(n)</span></div>
                     </a>
                 </div>
             </section>
