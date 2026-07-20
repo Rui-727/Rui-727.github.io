@@ -417,13 +417,15 @@
                     Rui here. I do
                     <span class="hl-blue">low level engineering</span>.
                     Currently working on
+                    <span class="hl-orange">Ishizue</span> (window server
+                    library, wlroots-style mechanism layer with a custom
+                    non-Wayland wire protocol).
                     <span class="hl-purple">2O9</span> (Arch Linux package
-                    manager with /nix/store/, generations, built-in debugger)
-                    and
-                    <span class="hl-yellow">zenctl</span> (C library for
-                    hardware control on Linux, 10 domains).
-                    <span class="hl-green">Hoshizora</span> (PID 1 init) is
-                    waiting on an issue. Also made
+                    manager),
+                    <span class="hl-yellow">zenctl</span> (hardware control
+                    library), and
+                    <span class="hl-green">Hoshizora</span> (PID 1 init) are
+                    all waiting on an issue. Also made
                     <span class="hl-red">RRSort</span> (adaptive radix sort,
                     O(n) when it can be) and
                     <span class="hl-cyan">gh-contribs</span> (extract GitHub
@@ -444,6 +446,12 @@
             <section class="section" id="projects">
                 <p class="section-label">projects</p>
                 <div class="projects-grid">
+                    <a href="https://github.com/Rui-727/Ishizue" target="_blank" class="project-card" style="--accent-color: var(--orange)">
+                        <span class="project-div">Systems / Window Server</span>
+                        <span class="project-name">Ishizue</span>
+                        <span class="project-desc">Window server library for Linux. Mechanism layer in the wlroots mold with a custom non-Wayland wire protocol. DRM/KMS atomic commits, libinput, libseat, dma-buf + drm_syncobj explicit sync, plane-slot model, headless test backend, separate-process X11 bridge speaking raw bytes. ~15k LOC, 4 integration tests passing.</span>
+                        <div class="project-tags"><span class="ptag">C11</span><span class="ptag">Linux</span><span class="ptag">DRM/KMS</span><span class="ptag">libinput</span><span class="ptag">libseat</span></div>
+                    </a>
                     <a href="https://github.com/Rui-727/2O9" target="_blank" class="project-card" style="--accent-color: var(--pink)">
                         <span class="project-div">Systems / Package Manager</span>
                         <span class="project-name">2O9</span>
